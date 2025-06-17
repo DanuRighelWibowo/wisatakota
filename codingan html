@@ -1,1 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pilih Wisata Kota</title>
+<style>
+    /* Reset and base */
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: #f9fafb;
+        color: #111827;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 24px 16px;
+    }
+    h1 {
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin-bottom: 24px;
+        text-align: center;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        user-select: none;
+    }
+
+    /* City selection section */
+    .city-selector {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 40px;
+    }
+    label {
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 12px;
+        color: #374151;
+    }
+    select {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 1rem;
+        border-radius: 12px;
+        border: 2px solid #d1d5db;
+        background: white;
+        transition: border-color 0.3s ease;
+        cursor: pointer;
+        appearance: none;
+        background-image:
+          url('data:image/svg+xml;utf8,<svg fill="%236b7280" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 20px 20px;
+    }
+    select:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 6px #4f46e5aa;
+    }
+
+    /* Tourist spots container */
+    .spots-container {
+        width: 100%;
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+        gap: 24px;
+    }
+
+    /* Card for each spot */
+    .spot-card {
+        background: rgb(255, 255, 255);
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.3s ease;
+    }
+    .spot-card:hover, .spot-card:focus-within {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        cursor: pointer;
+    }
+    .spot-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-bottom: 1px solid #ffffff;
+        background-color: #e0e7ff;
+    }
+    .spot-content {
+        padding: 16px 20px 24px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .spot-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #1e40af;
+    }
+    .spot-desc {
+        font-size: 0.95rem;
+        color: #4b5563;
+        flex-grow: 1;
+        line-height: 1.4;
+        user-select: text;
+    }
+
+    /* Responsive text scaling */
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .spot-image {
+            height: 150px;
+        }
+    }
+</style>
+</head>
+<body>
+<header>
+<h1>Pilih Wisata Kota</h1>
+</header>
+
+<section class="city-selector" aria-label="Pilih kota untuk wisata">
+    <label for="city-select">Pilih Kota:</label>
+    <select id="city-select" aria-describedby="city-desc" aria-controls="spots-container">
+        <option value="" disabled selected>-- Pilih Kota --</option>
+    </select>
+</section>
+
+<section class="spots-container" id="spots-container" tabindex="0" aria-live="polite" aria-label="Daftar wisata kota">
+    <!-- Spots will be rendered here dynamically -->
+</section>
+
+<script>
+    const cityData = {
+        jakarta: {
+            name: "Jakarta",
+            spots: [
+                {
+                    title: "Monumen Nasional (Monas)",
+                    description: "Ikon kota Jakarta dengan pemandangan kota dari atas.",
+                    image: "https://placehold.co/400x300/4f46e5/ffffff?text=Monumen+Nasional+Jakarta"
+                },
+                {
+                    title: "Kota Tua Jakarta",
+                    description: "Kawasan bersejarah dengan arsitektur kolonial Belanda dan museum.",
+                    image: "https://placehold.co/400x300/06b6d4/ffffff?text=Kota+Tua+Jakarta"
+                },
+                {
+                    title: "Ancol Dreamland",
+                    description: "Tempat hiburan keluarga dengan pantai, taman bermain, dan akuarium.",
+                    image: "https://placehold.co/400x300/1e40af/ffffff?text=Ancol+Dreamland"
+                }
+            ]
+        },
+        bandung: {
+            name: "Bandung",
+            spots: [
+                {
+                    title: "Jalan Braga",
+                    description: "Jalan bersejarah dengan kafe dan butik bergaya klasik.",
+                    image: "https://placehold.co/400x300/059669/ffffff?text=Jalan+Braga+Bandung"
+                },
+                {
+                    title: "Gunung Tangkuban Perahu",
+                    description: "Gunung berapi dengan kawah menakjubkan dan sumber air panas.",
+                    image: "https://placehold.co/400x300/10b981/ffffff?text=Gunung+Tangkuban+Perahu"
+                },
+                {
+                    title: "Trans Studio Bandung",
+                    description: "Salah satu taman hiburan dalam ruangan terbesar di Indonesia.",
+                    image: "https://placehold.co/400x300/047857/ffffff?text=Trans+Studio+Bandung"
+                }
+            ]
+        },
+        yogyakarta: {
+            name: "Yogyakarta",
+            spots: [
+                {
+                    title: "Candi Prambanan",
+                    description: "Kompleks candi Hindu yang megah dan bersejarah.",
+                    image: "https://placehold.co/400x300/f59e0b/ffffff?text=Candi+Prambanan"
+                },
+                {
+                    title: "Keraton Yogyakarta",
+                    description: "Istana Sultan yang kaya budaya dan sejarah Jawa.",
+                    image: "https://placehold.co/400x300/d97706/ffffff?text=Keraton+Yogyakarta"
+                },
+                {
+                    title: "Pantai Parangtritis",
+                    description: "Pantai dengan pasir hitam dan ombak besar di selatan Jawa.",
+                    image: "https://placehold.co/400x300/b45309/ffffff?text=Pantai+Parangtritis"
+                }
+            ]
+        }
+    };
+
+    const citySelect = document.getElementById('city-select');
+    const spotsContainer = document.getElementById('spots-container');
+
+    // Populate city select dropdown
+    function populateCities() {
+        Object.entries(cityData).forEach(([key, city]) => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = city.name;
+            citySelect.appendChild(option);
+        });
+    }
+
+    // Render spots cards
+    function renderSpots(cityKey) {
+        spotsContainer.innerHTML = '';
+        if (!cityKey || !cityData[cityKey]) {
+            spotsContainer.innerHTML = '<p style="font-size:1.25rem; color:#6b7280; text-align:center; width:100%;">Silakan pilih kota untuk melihat wisata.</p>';
+            return;
+        }
+        const spots = cityData[cityKey].spots;
+        spots.forEach(spot => {
+            const card = document.createElement('article');
+            card.className = 'spot-card';
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `Wisata ${spot.title}`);
+
+            const img = document.createElement('img');
+            img.className = 'spot-image';
+            img.src = spot.image;
+            img.alt = `Foto tempat wisata ${spot.title}`;
+
+            const content = document.createElement('div');
+            content.className = 'spot-content';
+
+            const title = document.createElement('h2');
+            title.className = 'spot-title';
+            title.textContent = spot.title;
+
+            const desc = document.createElement('p');
+            desc.className = 'spot-desc';
+            desc.textContent = spot.description;
+
+            content.appendChild(title);
+            content.appendChild(desc);
+
+            card.appendChild(img);
+            card.appendChild(content);
+
+            spotsContainer.appendChild(card);
+        });
+    }
+
+    citySelect.addEventListener('change', (e) => {
+        renderSpots(e.target.value);
+    });
+
+    // Initialize
+    populateCities();
+    renderSpots(null);
+</script>
+</body>
+</html>
+
 
